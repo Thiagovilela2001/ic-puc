@@ -1,0 +1,189 @@
+# =============================================================================
+# Tarefas do sistema de identificação de galpões culturais — São Paulo
+# =============================================================================
+#
+# As tarefas são executadas em sequência (Process.sequential):
+#   1. pesquisa_task   → produz lista de candidatos
+#   2. analise_task    → classifica cada candidato (usa contexto da tarefa 1)
+#   3. estruturacao_task → gera JSON final (usa contexto das tarefas 1 e 2)
+#
+# Variáveis interpoladas pelo CrewAI a partir do inputs dict em main.py:
+#   {municipios}         — string com municípios separados por vírgula
+#   {palavras_chave}     — string com keywords, uma por linha com "- " prefixo
+#   {limite_resultados}  — número máximo de candidatos (ex: "30")
+#   {data_coleta}        — data da execução no formato YYYY-MM-DD
+
+# -----------------------------------------------------------------------------
+# Tarefa 1 — Pesquisa
+# Executada pelo agente 'pesquisador' com ferramentas de busca web.
+# Produz uma lista numerada de candidatos a galpões reutilizados.
+# -----------------------------------------------------------------------------
+pesquisa_task:
+  description: >
+    Pesquise na web e identifique até {limite_resultados} galpões industriais,
+    armazéns, fábricas, depósitos e imóveis logísticos ou comerciais desativados
+    que foram reutilizados como espaços culturais no estado de São Paulo.
+
+    REGRA ABSOLUTA — ANTI-ALUCINAÇÃO:
+    Você DEVE usar as ferramentas de busca para encontrar cada candidato.
+    NUNCA inclua um espaço baseado em seu conhecimento de treinamento —
+    apenas o que foi retornado por uma chamada real de ferramenta conta.
+    Se as ferramentas não retornaram um resultado, ele não existe para você.
+    É preferível retornar 3 candidatos verídicos do que 10 inventados.
+
+    MUNICÍPIOS PRIORITÁRIOS (restrinja os resultados a estes):
+    {municipios}
+
+    PALAVRAS-CHAVE PARA BUSCA (realize ao menos uma busca por combinação):
+    {palavras_chave}
+
+    ETAPAS DA PESQUISA:
+    1. Use a ferramenta "Gerador de Consultas para Galpões Culturais" para obter
+       queries otimizadas para os municípios prioritários.
+    2. Execute ao menos uma busca para cada palavra-chave listada acima, variando
+       os tipos de imóvel (galpão, fábrica, armazém, depósito, usina) e os
+       tipos de uso cultural (centro cultural, ateliê, galeria, hub criativo).
+    3. Para cada resultado promissor, acesse a URL com a ferramenta de scraping
+       e extraia mais detalhes — a URL visitada deve constar na entrada.
+    4. Priorize fontes jornalísticas (Folha, Estadão, G1, UOL, Agência Brasil)
+       e institucionais (prefeituras, SESC, SESI, Secretaria de Cultura SP).
+    5. Prossiga buscando até atingir {limite_resultados} candidatos ou esgotar
+       todas as palavras-chave disponíveis.
+
+    RESTRIÇÕES:
+    - Inclua APENAS imóveis localizados no estado de São Paulo.
+    - Cada candidato DEVE ter uma URL real obtida via ferramenta — sem URL
+      verificada, o candidato não entra na lista.
+    - Não invente informações: se não encontrou um campo, escreva "não identificado".
+    - Evite duplicatas — se dois resultados descrevem o mesmo espaço, mantenha
+      apenas o mais completo.
+
+  expected_output: >
+    Lista numerada com os candidatos encontrados via ferramentas de busca,
+    até o máximo de {limite_resultados}. Retorne apenas candidatos com URL
+    real obtida por chamada de ferramenta — quantidade menor com veracidade
+    garantida é preferível a lista longa com entradas inventadas.
+
+    Cada item deve conter exatamente os seguintes campos em uma única entrada:
+    N. NOME | MUNICÍPIO | ANTIGO USO | USO CULTURAL ATUAL | URL DA FONTE
+
+    Exemplo de formato (não inventar — apenas como referência de estrutura):
+    1. Centro Cultural São Paulo | São Paulo | Depósito municipal | Centro cultural | https://exemplo.com
+    2. Galpão das Artes | Campinas | Fábrica têxtil | Ateliê coletivo e galeria | https://outro.com
+
+    Forneça todos os campos para cada item. Se algum campo for desconhecido,
+    escreva "não identificado" naquele campo. Mantenha o separador | entre campos.
+    Se após esgotar todas as buscas não houver nenhum candidato com URL verificada,
+    retorne explicitamente: "Nenhum candidato verificado encontrado."
+
+  agent: pesquisador
+
+# -----------------------------------------------------------------------------
+# Tarefa 2 — Análise
+# Executada pelo agente 'analista'. Lê o output da tarefa 1 via context.
+# Classifica cada candidato e fornece justificativa objetiva.
+# -----------------------------------------------------------------------------
+analise_task:
+  description: >
+    Analise cada candidato da lista produzida pelo Pesquisador e classifique-o
+    com base nos critérios abaixo. Você deve avaliar TODOS os candidatos da lista,
+    mesmo que o resultado final seja "não relevante" para muitos.
+
+    CRITÉRIOS DE CLASSIFICAÇÃO:
+
+    "relevante":
+      - O imóvel era claramente industrial, logístico, portuário ou comercial
+        (fábrica, armazém, galpão, depósito, usina, hangar etc.)
+      - Passou por uma reconversão funcional real para uso cultural
+      - Há evidência documental ou jornalística desta transformação
+
+    "parcialmente relevante":
+      - Há indícios de reconversão, mas as informações são incompletas
+      - O uso é misto (parte cultural + parte comercial ou residencial)
+      - A fonte não confirma explicitamente o antigo uso industrial
+
+    "não relevante":
+      - O imóvel foi construído originalmente como espaço cultural
+      - Passou apenas por reforma estética sem mudança real de função
+      - Está localizado fora do estado de São Paulo
+      - Informação insuficiente para qualquer avaliação
+
+    DESCARTE AUTOMÁTICO (classifique como "não relevante"):
+      - Teatros municipais, museus e centros culturais históricos que sempre
+        foram culturais desde a fundação
+      - Reformas de fachada ou modernização sem mudança de uso
+      - Imóveis em outros estados mencionados por comparação
+      - Candidatos cuja URL da fonte está como "não identificado" — sem fonte
+        verificável não é possível validar a existência do espaço
+
+  expected_output: >
+    Lista completa com todos os candidatos analisados. Para cada candidato:
+
+    N. NOME DO ESPAÇO
+       Município: [município]
+       Classificação: relevante | parcialmente relevante | não relevante
+       Justificativa: [1 a 2 frases objetivas explicando a decisão]
+       Fonte: [URL da fonte original]
+
+    Inclua todos os candidatos da lista, mesmo os classificados como
+    "não relevante". A classificação deve ser uma das três opções exatas,
+    sem variações ortográficas.
+
+  agent: analista
+  context:
+    - pesquisa_task
+
+# -----------------------------------------------------------------------------
+# Tarefa 3 — Estruturação de Dados
+# Executada pelo agente 'estruturador'. Lê o output das tarefas 1 e 2 via context.
+# Produz o JSON consolidado final salvo em output/galpaos_culturais.json.
+#
+# ATENÇÃO: As chaves {municipios} e {data_coleta} são interpoladas pelo CrewAI
+# com os valores passados no inputs dict em main.py.
+# -----------------------------------------------------------------------------
+estruturacao_task:
+  description: >
+    Com base na análise do Analista, processe APENAS os espaços classificados
+    como "relevante" ou "parcialmente relevante" e gere um JSON consolidado.
+
+    MUNICÍPIOS QUE FORAM PESQUISADOS (use esta lista exata para o campo
+    "municipios_pesquisados", independentemente de terem gerado resultados):
+    {municipios}
+
+    CAMPOS OBRIGATÓRIOS POR ESPAÇO (use "não informado" se ausente na fonte):
+      - nome              : nome oficial do espaço cultural
+      - endereco          : endereço completo (logradouro, número, bairro)
+      - municipio         : município no estado de São Paulo
+      - antigo_uso        : uso original do imóvel antes da conversão
+      - uso_atual_cultural: tipo de uso cultural atual
+      - ano_reutilizacao  : ano aproximado da conversão cultural
+      - fonte             : URL ou nome da fonte de informação
+      - relevancia        : "relevante" ou "parcialmente relevante" (exato)
+      - justificativa     : frase curta sobre a evidência de reconversão
+
+    ESTRUTURA OBRIGATÓRIA DO JSON DE SAÍDA:
+      A chave raiz deve ser "espacos_culturais" com um array de objetos,
+      seguida de "total" (inteiro com o número de espaços incluídos),
+      "municipios_pesquisados" (array de strings — use exatamente a lista
+      de municípios acima, separando cada nome em um elemento do array),
+      e "data_coleta" com o valor "{data_coleta}".
+
+    REGRAS CRÍTICAS:
+      - Inclua SOMENTE espaços "relevante" ou "parcialmente relevante"
+      - Use exatamente "não informado" (minúsculas, sem acento) para dados ausentes
+      - Nunca invente, suponha ou extrapole informações não confirmadas na fonte
+      - Retorne APENAS o JSON puro — sem texto antes, sem texto depois,
+        sem blocos de código markdown (sem ```json), sem comentários
+
+  expected_output: >
+    Um objeto JSON válido e completo contendo todos os espaços classificados
+    como "relevante" ou "parcialmente relevante". O JSON deve ser parseável
+    diretamente por json.loads() sem nenhum pré-processamento.
+    Estrutura esperada: objeto com chaves "espacos_culturais" (array),
+    "total" (número), "municipios_pesquisados" (array de strings com todos
+    os municípios que foram pesquisados) e "data_coleta" (string YYYY-MM-DD).
+
+  agent: estruturador
+  context:
+    - pesquisa_task
+    - analise_task

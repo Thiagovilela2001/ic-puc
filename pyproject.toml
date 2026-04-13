@@ -1,0 +1,26 @@
+[project]
+name = "relatorio"
+version = "0.1.0"
+description = "Sistema de identificação de galpões reutilizados para iniciativas culturais em São Paulo — CrewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==1.9.3",
+    "duckduckgo-search>=6.0.0",
+    "langchain-community>=0.3.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+relatorio = "relatorio.main:run"
+run_crew = "relatorio.main:run"
+train = "relatorio.main:train"
+replay = "relatorio.main:replay"
+test = "relatorio.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

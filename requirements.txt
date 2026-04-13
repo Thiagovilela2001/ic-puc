@@ -1,0 +1,24 @@
+# =============================================================================
+# Dependências do sistema de identificação de galpões culturais — São Paulo
+# =============================================================================
+# Instale com:  pip install -r requirements.txt
+# Ou via uv  :  uv pip install -r requirements.txt
+#
+# O projeto usa pyproject.toml como fonte canônica de dependências.
+# Este arquivo existe para conveniência e ambientes sem suporte a pyproject.
+# =============================================================================
+
+# --- Core -------------------------------------------------------------------
+crewai[tools]==1.9.3          # framework multi-agente + ferramentas integradas
+
+# --- Busca web (escolha uma opção) ------------------------------------------
+# Opção A — SerperDevTool (recomendado): configure SERPER_API_KEY no .env
+# Já incluída no crewai[tools], sem instalação extra necessária.
+
+# Opção B — DuckDuckGo (gratuito, sem chave de API):
+duckduckgo-search>=6.0.0     # backend para DuckDuckGoSearchRun (langchain_community)
+langchain-community>=0.3.0   # fornece DuckDuckGoSearchRun
+
+# --- Utilitários ------------------------------------------------------------
+python-dotenv>=1.0.0         # carregamento de variáveis de ambiente do .env
+pydantic>=2.0.0              # schemas de validação (já incluso via crewai)
