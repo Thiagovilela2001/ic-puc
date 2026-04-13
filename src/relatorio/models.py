@@ -3,8 +3,9 @@ Modelos Pydantic para representar e validar a saída estruturada do sistema
 de identificação de galpões reutilizados para iniciativas culturais em São Paulo.
 """
 
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Literal
+
+from pydantic import BaseModel, Field, model_validator
 
 
 class EspacoCultural(BaseModel):
@@ -42,7 +43,7 @@ class EspacoCultural(BaseModel):
     fonte: str = Field(
         description="URL completa ou nome da fonte de informação consultada"
     )
-    relevancia: str = Field(
+    relevancia: Literal["relevante", "parcialmente relevante", "não relevante"] = Field(
         description=(
             "Classificação de relevância: "
             "'relevante', 'parcialmente relevante' ou 'não relevante'"
@@ -71,6 +72,16 @@ class RelatorioGalpoesCulturais(BaseModel):
             "(relevantes + parcialmente relevantes)"
         )
     )
+
+    @model_validator(mode="after")
+    def total_deve_bater_com_lista(self) -> "RelatorioGalpoesCulturais":
+        esperado = len(self.espacos_culturais)
+        if self.total != esperado:
+            raise ValueError(
+                f"'total' ({self.total}) não corresponde ao número de espaços "
+                f"em 'espacos_culturais' ({esperado})."
+            )
+        return self
     municipios_pesquisados: List[str] = Field(
         description="Lista de municípios do estado de São Paulo incluídos na pesquisa"
     )

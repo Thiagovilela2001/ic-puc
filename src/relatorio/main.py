@@ -118,33 +118,20 @@ def _print_banner(inputs: dict[str, str]) -> None:
 
 def _validate_and_save_output() -> dict | None:
     """
-    Lê o arquivo de saída gerado pela crew, tenta fazer parse do JSON
-    e retorna o dicionário se válido. Remove blocos markdown se presentes.
+    Lê o arquivo de saída gerado pela crew e retorna o dicionário se válido.
+    O JSON já é gravado limpo pelo CrewAI via output_pydantic; esta função
+    serve como verificação final e ponto único de leitura do resultado.
     """
     if not OUTPUT_FILE.exists():
         print(f"\n[AVISO] Arquivo de saída não encontrado: {OUTPUT_FILE}")
         return None
 
-    raw = OUTPUT_FILE.read_text(encoding="utf-8").strip()
-
-    # Remove possíveis blocos de código markdown que o LLM possa ter inserido
-    if raw.startswith("```"):
-        lines = raw.splitlines()
-        # Remove primeira e última linha se forem delimitadores de bloco
-        start = 1 if lines[0].startswith("```") else 0
-        end = len(lines) - 1 if lines[-1].strip() == "```" else len(lines)
-        raw = "\n".join(lines[start:end]).strip()
-
     try:
-        data = json.loads(raw)
-        # Re-escreve o arquivo limpo (sem markdown)
-        OUTPUT_FILE.write_text(
-            json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
-        )
+        data = json.loads(OUTPUT_FILE.read_text(encoding="utf-8"))
         return data
     except json.JSONDecodeError as exc:
         print(f"\n[AVISO] O arquivo de saída não é JSON válido: {exc}")
-        print("  O conteúdo bruto foi preservado. Verifique o arquivo manualmente.")
+        print("  Verifique o arquivo manualmente.")
         return None
 
 
@@ -203,10 +190,7 @@ def run(
     inputs = _build_inputs(_municipios, _palavras_chave, limite_resultados)
     _print_banner(inputs)
 
-    try:
-        GalpoesCulturais().crew().kickoff(inputs=inputs)
-    except Exception as exc:
-        raise RuntimeError(f"Erro durante a execução da crew: {exc}") from exc
+    GalpoesCulturais().crew().kickoff(inputs=inputs)
 
     data = _validate_and_save_output()
     if data:
