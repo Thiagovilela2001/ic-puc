@@ -12,6 +12,7 @@
 #   {palavras_chave}     — string com keywords, uma por linha com "- " prefixo
 #   {limite_resultados}  — número máximo de candidatos (ex: "30")
 #   {data_coleta}        — data da execução no formato YYYY-MM-DD
+#   {resultados_busca}   — resultados coletados pela camada semântica em Python
 
 # -----------------------------------------------------------------------------
 # Tarefa 1 — Pesquisa
@@ -20,61 +21,51 @@
 # -----------------------------------------------------------------------------
 pesquisa_task:
   description: >
-    Pesquise na web e identifique até {limite_resultados} galpões industriais,
-    armazéns, fábricas, depósitos e imóveis logísticos ou comerciais desativados
-    que foram reutilizados como espaços culturais no estado de São Paulo.
+    Analise os resultados de busca abaixo, já coletados automaticamente pela
+    aplicação, e identifique todos os candidatos a galpões industriais, armazéns,
+    fábricas, depósitos ou imóveis logísticos desativados que foram reutilizados
+    como espaços culturais no estado de São Paulo.
 
-    REGRA ABSOLUTA — ANTI-ALUCINAÇÃO:
-    Você DEVE usar as ferramentas de busca para encontrar cada candidato.
-    NUNCA inclua um espaço baseado em seu conhecimento de treinamento —
-    apenas o que foi retornado por uma chamada real de ferramenta conta.
-    Se as ferramentas não retornaram um resultado, ele não existe para você.
-    É preferível retornar 3 candidatos verídicos do que 10 inventados.
+    ESCOPO GEOGRÁFICO: {municipios}
 
-    MUNICÍPIOS PRIORITÁRIOS (restrinja os resultados a estes):
-    {municipios}
+    RESULTADOS DE BUSCA COLETADOS, FILTRADOS E VALIDADOS:
+    {resultados_busca}
 
-    PALAVRAS-CHAVE PARA BUSCA (realize ao menos uma busca por combinação):
-    {palavras_chave}
-
-    ETAPAS DA PESQUISA:
-    1. Use a ferramenta "Gerador de Consultas para Galpões Culturais" para obter
-       queries otimizadas para os municípios prioritários.
-    2. Execute ao menos uma busca para cada palavra-chave listada acima, variando
-       os tipos de imóvel (galpão, fábrica, armazém, depósito, usina) e os
-       tipos de uso cultural (centro cultural, ateliê, galeria, hub criativo).
-    3. Para cada resultado promissor, acesse a URL com a ferramenta de scraping
-       e extraia mais detalhes — a URL visitada deve constar na entrada.
-    4. Priorize fontes jornalísticas (Folha, Estadão, G1, UOL, Agência Brasil)
-       e institucionais (prefeituras, SESC, SESI, Secretaria de Cultura SP).
-    5. Prossiga buscando até atingir {limite_resultados} candidatos ou esgotar
-       todas as palavras-chave disponíveis.
+    INSTRUÇÕES:
+    1. Leia todos os resultados acima e extraia cada candidato que mencione
+       qualquer tipo de imóvel industrial ou logístico convertido para uso cultural.
+    2. Use os trechos de página já extraídos como evidência principal. Se a
+       ferramenta de scraping estiver disponível, use-a apenas para aprofundar
+       URLs já listadas, nunca para descobrir novos candidatos.
+    3. Inclua um candidato mesmo que as informações sejam parciais — o Analista
+       vai avaliar a relevância. Prefira incluir a excluir.
+    4. Se um resultado mencionar múltiplos espaços distintos, crie uma entrada
+       separada para cada um.
+    5. Evite duplicatas — se dois resultados descrevem o mesmo espaço, mantenha
+       apenas o mais completo.
 
     RESTRIÇÕES:
-    - Inclua APENAS imóveis localizados no estado de São Paulo.
-    - Cada candidato DEVE ter uma URL real obtida via ferramenta — sem URL
-      verificada, o candidato não entra na lista.
+    - Inclua APENAS imóveis localizados no estado de São Paulo (qualquer município).
+    - Não execute novas buscas abertas para inventar candidatos fora da lista
+      coletada pela camada semântica.
     - Não invente informações: se não encontrou um campo, escreva "não identificado".
-    - Evite duplicatas — se dois resultados descrevem o mesmo espaço, mantenha
-      apenas o mais completo.
 
   expected_output: >
-    Lista numerada com os candidatos encontrados via ferramentas de busca,
-    até o máximo de {limite_resultados}. Retorne apenas candidatos com URL
-    real obtida por chamada de ferramenta — quantidade menor com veracidade
-    garantida é preferível a lista longa com entradas inventadas.
+    Lista numerada com todos os candidatos identificados nos resultados de busca,
+    até o máximo de {limite_resultados}. Inclua tudo que tiver indício de ser
+    um imóvel industrial convertido para uso cultural — o Analista fará o filtro.
 
-    Cada item deve conter exatamente os seguintes campos em uma única entrada:
+    Cada item deve conter exatamente os seguintes campos:
     N. NOME | MUNICÍPIO | ANTIGO USO | USO CULTURAL ATUAL | URL DA FONTE
 
-    Exemplo de formato (não inventar — apenas como referência de estrutura):
+    Exemplo de formato:
     1. Centro Cultural São Paulo | São Paulo | Depósito municipal | Centro cultural | https://exemplo.com
     2. Galpão das Artes | Campinas | Fábrica têxtil | Ateliê coletivo e galeria | https://outro.com
 
-    Forneça todos os campos para cada item. Se algum campo for desconhecido,
-    escreva "não identificado" naquele campo. Mantenha o separador | entre campos.
-    Se após esgotar todas as buscas não houver nenhum candidato com URL verificada,
-    retorne explicitamente: "Nenhum candidato verificado encontrado."
+    Se algum campo for desconhecido, escreva "não identificado" naquele campo.
+    Mantenha o separador | entre campos.
+    Se os resultados de busca não contiverem nenhum candidato relevante,
+    retorne explicitamente: "Nenhum candidato encontrado nos resultados de busca."
 
   agent: pesquisador
 
@@ -146,9 +137,8 @@ estruturacao_task:
     Com base na análise do Analista, processe APENAS os espaços classificados
     como "relevante" ou "parcialmente relevante" e gere um JSON consolidado.
 
-    MUNICÍPIOS QUE FORAM PESQUISADOS (use esta lista exata para o campo
-    "municipios_pesquisados", independentemente de terem gerado resultados):
-    {municipios}
+    ESCOPO PESQUISADO (use para preencher o campo "municipios_pesquisados"):
+    {municipios} — registre o município real de cada espaço encontrado.
 
     CAMPOS OBRIGATÓRIOS POR ESPAÇO (use "não informado" se ausente na fonte):
       - nome              : nome oficial do espaço cultural

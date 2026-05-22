@@ -3,15 +3,14 @@ Crew principal do sistema de identificação de galpões reutilizados para
 iniciativas culturais no estado de São Paulo.
 
 Fluxo de execução (Process.sequential):
-  1. pesquisador  → pesquisa_task    : busca candidatos na web
+  1. pesquisador  → pesquisa_task    : analisa candidatos coletados previamente
   2. analista     → analise_task     : classifica cada candidato
   3. estruturador → estruturacao_task: gera JSON consolidado final
 
-Ferramentas de busca (carregadas condicionalmente em _search_tools):
-  - SerperDevTool          : busca Google via Serper API (requer SERPER_API_KEY)
-  - DuckDuckGoSearchRun    : busca gratuita via DuckDuckGo (fallback)
-  - ScrapeWebsiteTool      : scraping de URLs para aprofundar resultados
-  - GerarConsultasBuscaTool: tool customizada que gera queries otimizadas
+Busca web:
+  - A coleta de links ocorre antes da crew, em relatorio.search.SemanticSearchPipeline.
+  - O pesquisador recebe resultados ja filtrados e pode usar scraping para aprofundar URLs.
+  - Busca aberta pelo agente so e habilitada se CREWAI_ENABLE_AGENT_SEARCH=1.
 """
 
 import os
@@ -22,7 +21,7 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai.project import CrewBase, agent, crew, task
 
 from relatorio.models import RelatorioGalpoesCulturais
-from relatorio.tools.search_tools import GerarConsultasBuscaTool
+from relatorio.tools.search_tools import DuckDuckGoDirectTool, GerarConsultasBuscaTool
 
 
 # ---------------------------------------------------------------------------
@@ -51,13 +50,14 @@ def _load_serper() -> list:
 
 
 def _load_duckduckgo() -> list:
-    """Carrega DuckDuckGoSearchRun como fallback gratuito."""
+    """Carrega DuckDuckGoDirectTool (DDGS direto, com retry) como fallback gratuito."""
     try:
-        from langchain_community.tools import DuckDuckGoSearchRun
-        print("  [tools] DuckDuckGoSearchRun carregada (fallback gratuito)")
-        return [DuckDuckGoSearchRun()]
+        import duckduckgo_search  # noqa: F401 — verifica se está instalado
+        tool = DuckDuckGoDirectTool()
+        print("  [tools] DuckDuckGoDirectTool carregada (DDGS direto, com retry)")
+        return [tool]
     except ImportError:
-        print("  [tools] DuckDuckGoSearchRun indisponível — instale duckduckgo-search")
+        print("  [tools] duckduckgo-search indisponível — instale duckduckgo-search")
         return []
 
 
@@ -81,9 +81,10 @@ class GalpoesCulturais:
 
     Inputs esperados pelo kickoff (definidos em main.py):
       municipios         : str — municípios separados por vírgula
-      palavras_chave     : str — keywords, uma por linha com "- " prefixo
+      palavras_chave     : str — queries executadas, uma por linha
       limite_resultados  : str — número máximo de candidatos
       data_coleta        : str — data no formato YYYY-MM-DD
+      resultados_busca   : str — links coletados pela camada semântica
     """
 
     agents: List[BaseAgent]
@@ -95,23 +96,31 @@ class GalpoesCulturais:
 
     def _search_tools(self) -> list:
         """
-        Retorna a lista de ferramentas de busca disponíveis no ambiente.
-        Prioridade: SerperDevTool > DuckDuckGoSearchRun > sem busca web.
-        ScrapeWebsiteTool e GerarConsultasBuscaTool são sempre incluídas.
-        """
-        print("\n[crew] Carregando ferramentas de busca...")
+        Retorna ferramentas de apoio para o Pesquisador.
 
-        web_tools = _load_serper() or _load_duckduckgo()
+        Por padrao a busca web aberta fica fora do agente e acontece em
+        SemanticSearchPipeline. Para depuracao, defina CREWAI_ENABLE_AGENT_SEARCH=1
+        e a crew volta a carregar Serper/DuckDuckGo.
+        """
+        print("\n[crew] Carregando ferramentas de apoio...")
+
+        web_tools = []
+        if os.getenv("CREWAI_ENABLE_AGENT_SEARCH") == "1":
+            web_tools = _load_serper() or _load_duckduckgo()
+        else:
+            print(
+                "  [tools] Busca web aberta desativada no agente; "
+                "usando resultados da camada semântica."
+            )
 
         if not web_tools:
             print(
-                "  [tools] AVISO: Nenhuma ferramenta de busca web disponível.\n"
-                "  Defina SERPER_API_KEY no .env ou instale duckduckgo-search.\n"
-                "  O agente usará apenas o conhecimento do modelo de linguagem."
+                "  [tools] O agente não fará novas buscas por links; "
+                "apenas analisará e, se possível, raspará URLs já coletadas."
             )
 
         scraper = _load_scraper()
-        query_generator = [GerarConsultasBuscaTool()]
+        query_generator = [] if not web_tools else [GerarConsultasBuscaTool()]
 
         tools = query_generator + web_tools + scraper
         print(f"  [tools] {len(tools)} ferramenta(s) carregada(s): "

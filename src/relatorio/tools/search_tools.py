@@ -1,16 +1,70 @@
 """
-Ferramenta customizada para gerar consultas de busca otimizadas em português,
+Ferramentas customizadas para busca e geração de consultas otimizadas em português,
 focadas em encontrar galpões industriais reutilizados como espaços culturais
 no estado de São Paulo.
 
-Esta ferramenta complementa o SerperDevTool/DuckDuckGo: em vez de fazer a
-busca ela mesma, ela gera as queries mais eficazes para que o agente pesquisador
-possa realizar buscas diversificadas e direcionadas.
+DuckDuckGoDirectTool  — busca web via DDGS (sem wrapper LangChain), com retry
+GerarConsultasBuscaTool — gera queries otimizadas para o agente pesquisador
 """
+
+import time
 
 from crewai.tools import BaseTool
 from typing import Type
 from pydantic import BaseModel, Field
+
+
+# ---------------------------------------------------------------------------
+# DuckDuckGo direto via DDGS (sem wrapper LangChain) com retry
+# ---------------------------------------------------------------------------
+
+class DDGInput(BaseModel):
+    """Parâmetros de entrada para a busca DuckDuckGo."""
+
+    query: str = Field(description="Consulta de busca em português")
+
+
+class DuckDuckGoDirectTool(BaseTool):
+    """
+    Busca na web via DuckDuckGo usando DDGS diretamente (sem wrapper LangChain).
+    Retorna até 10 resultados com título, URL e trecho de texto.
+    Usa retry automático (até 3 tentativas) para contornar rate limiting.
+    """
+
+    name: str = "DuckDuckGo Web Search"
+    description: str = (
+        "Realiza uma busca na web via DuckDuckGo. "
+        "Retorna os 10 primeiros resultados com título, URL e trecho. "
+        "Use para encontrar páginas sobre galpões culturais, espaços de arte "
+        "e imóveis industriais reutilizados no estado de São Paulo."
+    )
+    args_schema: Type[BaseModel] = DDGInput
+
+    def _run(self, query: str) -> str:
+        try:
+            from duckduckgo_search import DDGS
+        except ImportError:
+            return "Erro: pacote duckduckgo-search não instalado."
+
+        last_error: str = ""
+        for attempt in range(3):
+            try:
+                with DDGS() as ddg:
+                    results = list(ddg.text(query, max_results=10))
+                if not results:
+                    return f"Nenhum resultado encontrado para: {query}"
+                lines: list[str] = []
+                for r in results:
+                    lines.append(f"Título : {r.get('title', 'N/A')}")
+                    lines.append(f"URL    : {r.get('href', 'N/A')}")
+                    lines.append(f"Trecho : {r.get('body', 'N/A')}")
+                    lines.append("")
+                return "\n".join(lines)
+            except Exception as exc:
+                last_error = str(exc)
+                if attempt < 2:
+                    time.sleep(2 ** attempt)  # 1s, 2s entre tentativas
+        return f"Erro na busca DuckDuckGo após 3 tentativas: {last_error}"
 
 
 # ---------------------------------------------------------------------------

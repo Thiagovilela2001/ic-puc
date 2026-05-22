@@ -4,4 +4,5 @@ __pycache__/
 *.pyc
 .venv/
 output/*.json
+output/cache_busca/
 !output/.gitkeep

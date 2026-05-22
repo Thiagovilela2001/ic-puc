@@ -1,3 +1,3 @@
-from relatorio.tools.search_tools import GerarConsultasBuscaTool
+from relatorio.tools.search_tools import DuckDuckGoDirectTool, GerarConsultasBuscaTool
 
-__all__ = ["GerarConsultasBuscaTool"]
+__all__ = ["DuckDuckGoDirectTool", "GerarConsultasBuscaTool"]
