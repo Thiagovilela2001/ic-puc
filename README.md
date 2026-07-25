@@ -39,6 +39,14 @@ This command initializes the relatorio Crew, assembling the agents and assigning
 
 This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
 
+## Resultados e relatórios
+
+- [Galpões culturais identificados](output/galpaos_culturais.json)
+- [Resultado completo da busca semântica](output/busca_semantica.json)
+- [Relatório final de galpões culturais](docs/relatorios/relatorio_final_galpaos_culturais.md)
+- [Relatório de galpões culturais](docs/relatorios/relatorio_galpaos_culturais.md)
+- [Versões anteriores dos relatórios](docs/relatorios/versoes/)
+
 ## Understanding Your Crew
 
 The relatorio Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.

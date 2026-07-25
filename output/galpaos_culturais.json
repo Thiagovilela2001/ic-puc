@@ -1,0 +1,237 @@
+{
+  "espacos_culturais": [
+    {
+      "nome": "Centro Cultural Fábrica São Pedro",
+      "endereco": "não informado",
+      "municipio": "Itu",
+      "antigo_uso": "Companhia Fiação e Tecelagem São Pedro (complexo industrial têxtil)",
+      "uso_atual_cultural": "Centro cultural com museus e espaços expositivos",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.instagram.com/reel/DQjzKt9EUKY/?hl=pt",
+      "relevancia": "relevante",
+      "justificativa": "Complexo industrial têxtil reconvertido em centro cultural com museus e espaços expositivos, conforme evidência documental e uso atual."
+    },
+    {
+      "nome": "Galpões da Fepasa",
+      "endereco": "não informado",
+      "municipio": "Bauru",
+      "antigo_uso": "Galpões ferroviários da Fepasa",
+      "uso_atual_cultural": "Museus e espaços culturais municipais",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www1.folha.uol.com.br/fsp/cotidian/ff271038.htm",
+      "relevancia": "relevante",
+      "justificativa": "Galpões ferroviários desativados da Fepasa reconvertidos em museus e centros culturais municipais, com ampla cobertura jornalística sobre a transformação de uso ferroviário para cultural."
+    },
+    {
+      "nome": "Galpão Fábrica Matarazzo",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Antiga fábrica Matarazzo",
+      "uso_atual_cultural": "Espaço cultural para eventos e performances artísticas",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.estadao.com.br/cultura/free-zone-ganha-versao-paulistana/?srsltid=AfmBOortbV-pht47dRONTDZepQGAIKhCBC9y2iVQj1Gx_i9069djJCMs",
+      "relevancia": "relevante",
+      "justificativa": "Instalação em antiga fábrica Matarazzo, reconvertida em espaço cultural de eventos e performances, com uso artístico comprovado."
+    },
+    {
+      "nome": "Galpão 556",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Galpão industrial",
+      "uso_atual_cultural": "Galeria e espaço cultural de arte contemporânea",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.estadao.com.br/cultura/gilberto-amendola/separacao-e-estopim-para-colecionadora-realizar-sonho-de-abrir-galeria-de-arte/?srsltid=AfmBOopiiPkj7oruxGDQIvhYXxdyYSl4qSr5fH8s9G9dMBKHkYtUHk1g",
+      "relevancia": "relevante",
+      "justificativa": "Galpão industrial convertido em galeria e espaço cultural de arte contemporânea; evidência clara de reconversão funcional."
+    },
+    {
+      "nome": "Galeria São Paulo Flutuante",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Antigo depósito com 300 m²",
+      "uso_atual_cultural": "Galeria de arte contemporânea",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://revistacasaejardim.globo.com/Casa-e-Jardim/Arte/noticia/2021/01/antigo-galpao-na-barra-funda-abriga-galeria-de-arte-renomada.html",
+      "relevancia": "relevante",
+      "justificativa": "Ocupa antigo depósito reconvertido em galeria de arte contemporânea; fonte confirma o uso industrial anterior."
+    },
+    {
+      "nome": "Nucle1 Centro de Artes",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Fábrica de gravatas",
+      "uso_atual_cultural": "Espaço cultural de arte urbana e contemporânea",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.facebook.com/vipzinho.com.br/posts/s%C3%A3o-paulo-sempre-surpreende-quem-se-permite-olhar-com-calma-e-agora-ganhou-mais-/1561109796016366/",
+      "relevancia": "relevante",
+      "justificativa": "Instala-se em antiga fábrica de gravatas, agora espaço de arte urbana e contemporânea; evidência clara de reconversão industrial."
+    },
+    {
+      "nome": "Espaço Funarte São Paulo",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Antigo galpão usado como cavalariça e depósito",
+      "uso_atual_cultural": "Centro cultural voltado à formação artística",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://culturaemercado.com.br/espaco-funarte-sao-paulo-e-reinaugurado/",
+      "relevancia": "relevante",
+      "justificativa": "Galpão histórico usado como cavalariça e depósito, convertido em centro cultural da Funarte; caracterização clara de reconversão de uso."
+    },
+    {
+      "nome": "Movimento Cultural Recreativo Dois-Dois",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Antigo imóvel industrial desativado",
+      "uso_atual_cultural": "Espaço cultural independente com rodas de samba, oficinas e debates",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://agemt.pucsp.br/noticias/movimento-dois-dois-e-favela-do-moinho-se-conectam-na-disputa-pelo-centro-de-sao-paulo",
+      "relevancia": "relevante",
+      "justificativa": "Ocupa imóvel industrial desativado adaptado para espaço cultural independente com atividades artísticas e comunitárias."
+    },
+    {
+      "nome": "Espaço Cultural Tattersal",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Antigo galpão usado para leilões de gado",
+      "uso_atual_cultural": "Teatro e espaço cultural público",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.estadao.com.br/cultura/em-sp-galpao-vira-teatro-no-parque-da-agua-branca/?srsltid=AfmBOopgMPOzNZAwWsLpH7VRyNToX03-ydl989jUSmh_dRzsrkwhw6_U",
+      "relevancia": "relevante",
+      "justificativa": "Galpão originalmente usado para leilões de gado convertido em teatro e espaço cultural público."
+    },
+    {
+      "nome": "Galpão da Lua",
+      "endereco": "não informado",
+      "municipio": "Presidente Prudente",
+      "antigo_uso": "Galpão ferroviário abandonado",
+      "uso_atual_cultural": "Espaço cultural autogestionado por coletivo artístico",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://g1.globo.com/sp/presidente-prudente-regiao/noticia/2019/10/18/com-varias-atividades-culturais-galpao-da-lua-comemora-tres-anos-de-ocupacao-de-barracao-em-presidente-prudente.ghtml",
+      "relevancia": "relevante",
+      "justificativa": "Galpão ferroviário abandonado reocupado por coletivo artístico, com evidência jornalística da reconversão cultural autogestionada."
+    },
+    {
+      "nome": "Fábrica Matarazzo (Centro Cultural)",
+      "endereco": "não informado",
+      "municipio": "Presidente Prudente",
+      "antigo_uso": "Fábrica Matarazzo",
+      "uso_atual_cultural": "Centro cultural e local de oficinas culturais",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.imparcial.com.br/noticias/fotografia-e-radio-sao-temas-de-oficinas-gratuitas,16558",
+      "relevancia": "relevante",
+      "justificativa": "Antiga fábrica Matarazzo agora utilizada como centro cultural com oficinas; transformação de uso comprovada."
+    },
+    {
+      "nome": "Fábrica de Cultura Vila Nova Cachoeirinha",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "não identificado (instalação nova em área fabril desativada)",
+      "uso_atual_cultural": "Espaço cultural público com oficinas e cursos",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.cultura.sp.gov.br/sec_cultura/Programas/Forma%C3%A7%C3%A3o/Fabrica_de_Cultura_de_Vila_Nova_Cachoeirinha",
+      "relevancia": "parcialmente relevante",
+      "justificativa": "Fonte menciona área fabril desativada, mas não confirma documentalmente o reaproveitamento direto de edifício industrial; indício de conceito simbólico de 'fábrica de cultura'."
+    },
+    {
+      "nome": "Fábrica de Cultura Jardim São Luís",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "não identificado (modelo de reutilização de área fabril)",
+      "uso_atual_cultural": "Centro cultural com teatro e atividades educativas",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.instagram.com/p/DTdExNJgG68/",
+      "relevancia": "parcialmente relevante",
+      "justificativa": "Não há confirmação de que o edifício reutiliza estrutura industrial existente; trata-se provavelmente de construção nova com nome simbólico 'Fábrica'."
+    },
+    {
+      "nome": "Fábrica São Luiz",
+      "endereco": "não informado",
+      "municipio": "Itu",
+      "antigo_uso": "Fábrica têxtil (São Luiz, primeira indústria a vapor de SP)",
+      "uso_atual_cultural": "Complexo cultural com eventos, feiras e atividades patrimoniais",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.facebook.com/Iphangov/posts/de-tecelagem-pioneira-a-complexo-cultural-a-f%C3%A1brica-s%C3%A3o-luiz-agora-%C3%A9-oficialment/834085856039317/",
+      "relevancia": "relevante",
+      "justificativa": "Primeira indústria a vapor de São Paulo, fábrica têxtil convertida em centro cultural e de eventos; reconversão celebrada em fontes oficiais."
+    },
+    {
+      "nome": "Armazém Ferroviário de Pontal",
+      "endereco": "não informado",
+      "municipio": "Pontal",
+      "antigo_uso": "Antigo armazém ferroviário (1904)",
+      "uso_atual_cultural": "Futuro centro cultural com cine-teatro e sala de exposições",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.al.sp.gov.br/noticia/?id=327721",
+      "relevancia": "relevante",
+      "justificativa": "Antigo armazém ferroviário de 1904 destinado à transformação em centro cultural com cine-teatro; reconversão documentada em notícia legislativa."
+    },
+    {
+      "nome": "Antigo Armazém de Exportação (Valongo)",
+      "endereco": "não informado",
+      "municipio": "Santos",
+      "antigo_uso": "Armazém de exportação de café do século XIX",
+      "uso_atual_cultural": "Espaço restaurado vinculado a projetos culturais do porto",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://institutopedra.org.br/projetos/antigo-armazem-de-exportacao/",
+      "relevancia": "relevante",
+      "justificativa": "Armazém de exportação de café do século XIX restaurado e integrado a projetos culturais portuários; reconversão patrimonial confirmada."
+    },
+    {
+      "nome": "Instituto Galpão da Lapa",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Antigo armazém de café da Ceagesp",
+      "uso_atual_cultural": "Espaço cultural gratuito com coleção de arte contemporânea",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.instagram.com/p/DYNr2QpERAX/?img_index=6&hl=es",
+      "relevancia": "relevante",
+      "justificativa": "Antigo armazém de café da Ceagesp transformado em instituto cultural gratuito com acervo artístico; evidência de reconversão funcional."
+    },
+    {
+      "nome": "Fábrica de Cimento Portland Perus",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Fábrica de cimento abandonada",
+      "uso_atual_cultural": "Projeto comunitário para criação de espaço de cultura e memória do trabalhador",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://vermelho.org.br/2014/06/03/sp-moradores-querem-transformar-antiga-fabrica-em-espaco-cultural/",
+      "relevancia": "parcialmente relevante",
+      "justificativa": "Fábrica abandonada com projeto comunitário de reconversão cultural em andamento; uso cultural futuro ainda não consolidado."
+    },
+    {
+      "nome": "Complexo Cacau Show / Fábrica Megacacaushow",
+      "endereco": "não informado",
+      "municipio": "Itapevi",
+      "antigo_uso": "Fábrica de chocolate",
+      "uso_atual_cultural": "Espaço cultural e de lazer com parque temático",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.instagram.com/reel/DB4jRZlxfS6/",
+      "relevancia": "parcialmente relevante",
+      "justificativa": "Fábrica de chocolate ativa que inclui espaços culturais e de lazer de acesso público, mas sem substituição completa da função industrial."
+    },
+    {
+      "nome": "Galpão Floresta Cultural",
+      "endereco": "não informado",
+      "municipio": "São Paulo",
+      "antigo_uso": "Galpão industrial",
+      "uso_atual_cultural": "Espaço cultural voltado à requalificação urbana e sustentabilidade",
+      "ano_reutilizacao": "não informado",
+      "fonte": "https://www.instagram.com/reel/DLsYagsuoCP/",
+      "relevancia": "relevante",
+      "justificativa": "Galpão industrial convertido em espaço de arte e sustentabilidade urbana, com linguagem e ocupação cultural confirmada pela fonte."
+    }
+  ],
+  "total": 20,
+  "municipios_pesquisados": [
+    "Itu",
+    "Bauru",
+    "Marília",
+    "Rio Claro",
+    "São Paulo",
+    "Presidente Prudente",
+    "Pontal",
+    "Santos",
+    "Itapevi"
+  ],
+  "data_coleta": "2026-05-22"
+}
