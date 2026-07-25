@@ -3,6 +3,5 @@ __pycache__/
 .DS_Store
 *.pyc
 .venv/
-output/*.json
 output/cache_busca/
 !output/.gitkeep
